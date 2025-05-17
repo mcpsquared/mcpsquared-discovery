@@ -1,0 +1,29 @@
+# Cursor Rules for MCP Squared Discovery Service
+
+# Enforce consistent import style
+rule "import-style" {
+  description = "Use absolute imports for project modules"
+  pattern = "from \\.\\."
+  message = "Use absolute imports (from mcpsquared_discovery) instead of relative imports"
+}
+
+# Enforce docstring style
+rule "docstring-style" {
+  description = "Ensure functions have docstrings"
+  pattern = "def [^#\\n]*\\):\\s*\\n\\s*[^\"']"
+  message = "Add docstrings to functions"
+}
+
+# Enforce async/await consistency
+rule "async-consistency" {
+  description = "Ensure async functions use await"
+  pattern = "async def [^#\\n]*\\):[^#\\n]*\\n(?:(?!await).)*return"
+  message = "Async function should use await or be converted to sync function"
+}
+
+# Enforce error handling in API routes
+rule "api-error-handling" {
+  description = "Ensure API routes have error handling"
+  pattern = "@router\\.(?:get|post|put|delete)\\([^)]*\\)\\s*async def [^#\\n]*\\):[^#\\n]*\\n(?:(?!try).)*return"
+  message = "API routes should include error handling with try/except blocks"
+}

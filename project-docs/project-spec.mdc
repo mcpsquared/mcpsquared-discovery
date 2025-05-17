@@ -1,0 +1,67 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP Squared Discovery Service
+
+## Overview
+A FastAPI-based backend service that recommends publicly available MCP Servers and tools for use by a locally running MCP Squared discovery tool. The service accepts a prompt and file attachments, then returns a JSON response with recommended MCP servers.
+
+## Core Requirements
+- Accept a prompt and file attachments (project specs, package configs)
+- Search for relevant MCP servers using the Smithery API
+- Use LangChain with Claude 3.5 Sonnet via OpenRouter to evaluate search results
+- Generate detailed descriptions and installation instructions for each recommended server
+- Return a structured JSON response with server recommendations
+
+## Technical Stack
+- Python 3.12.7 with Poetry for dependency management
+- FastAPI for the web framework
+- LangChain for LLM integration
+- HTTPX for async HTTP requests
+- Pydantic for data validation
+- Docker for containerization
+
+## API Endpoints
+- `POST /discover`: Main endpoint that accepts multipart form data with prompt and file attachments
+
+## Response Format
+```json
+{
+  "mcp_servers": [
+    {
+      "title": "Server Name",
+      "github_url": "https://github.com/repo",
+      "project_url": "https://project-site.com",
+      "sources": [
+        {
+          "source_name": "directory-name",
+          "source_url": "https://source-url.com",
+          "source_title": "Page Title",
+          "source_description": "Brief description"
+        }
+      ],
+      "cli_command": "npm install package",
+      "description": "Short description",
+      "content": "Detailed markdown content"
+    }
+  ]
+}
+```
+
+## Implementation Plan
+1. Set up project structure with Poetry
+2. Implement FastAPI endpoints for file upload
+3. Create Smithery API integration
+4. Implement LangChain with Claude 3.5 Sonnet
+5. Develop content retrieval service
+6. Create Docker configuration
+7. Add tests and documentation
+
+## Future Enhancements
+- Add more MCP directory sources
+- Implement web search with site restrictions
+- Add caching for improved performance
+- Implement user feedback mechanism
+

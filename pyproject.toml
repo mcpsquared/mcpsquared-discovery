@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "mcp-squared-discovery"
+version = "0.1.1"
+description = "A service to recommend MCP Servers based on project context"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "mcpsquared_discovery", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12.7"
+fastapi = "^0.115.12"
+uvicorn = "^0.27.0"
+httpx = "^0.26.0"
+python-multipart = "^0.0.9"
+langchain = "^0.3.25"
+langchain-openai = "^0.3.17"
+pydantic = "^2.6.1"
+pydantic-settings = "^2.2.1"
+python-dotenv = "^1.0.1"
+openai = "^1.79.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.5"
+black = "^24.1.1"
+isort = "^5.13.2"
+mypy = "^1.8.0"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["src/tests"]
+python_files = "test_*.py"

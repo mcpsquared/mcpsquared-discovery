@@ -1,0 +1,47 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This is the project structure we are using as a base.
+
+mcpsquared_discovery/
+├── .cursor/
+│   └── mcp.json
+├── .cursorrules
+├── src/
+│   ├── mcpsquared_discovery/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py
+│   │   │   └── logging.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── analyzer.py
+│   │   │   ├── search.py
+│   │   │   ├── content_retrieval.py
+│   │   │   └── llm.py
+│   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   └── schemas.py
+│   │   └── prompts/
+│   │       ├── __init__.py
+│   │       ├── query_generation.py
+│   │       ├── result_selection.py
+│   │       └── content_generation.py
+│   └── tests/
+│       ├── __init__.py
+│       ├── test_api.py
+│       ├── test_analyzer.py
+│       ├── test_search.py
+│       └── test_llm.py
+├── Dockerfile
+├── docker-compose.yml
+├── pyproject.toml
+├── poetry.lock
+└── README.md
