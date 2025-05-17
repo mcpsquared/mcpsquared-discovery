@@ -2,7 +2,7 @@
 name = "mcp-squared-discovery"
 version = "0.1.1"
 description = "A service to recommend MCP Servers based on project context"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["Jed White <jed@jedwhite.com>, Mats Dodd <mats@matsdodd.com>"]
 readme = "README.md"
 packages = [{include = "mcpsquared_discovery", from = "src"}]
 
