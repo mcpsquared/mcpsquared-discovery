@@ -3,9 +3,12 @@ Main application module for MCP Squared Discovery Service.
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
 # from mcpsquared_discovery.api.routes import router
 # from mcpsquared_discovery.core.config import settings
+
+
 
 app = FastAPI(
     title="MCP Squared Discovery Service",
