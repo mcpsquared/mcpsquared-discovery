@@ -2,9 +2,10 @@
 Service for LLM interactions using LangChain.
 """
 
+import logging
 from typing import Dict, List
 
-from langchain_openai import ChatOpenAI
+from langchain_community.chat_models import ChatLiteLLM
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import StrOutputParser
 
@@ -13,6 +14,9 @@ from mcpsquared_discovery.models.schemas import MCPServer, Source
 from mcpsquared_discovery.prompts.content_generation import CONTENT_GENERATION_PROMPT
 from mcpsquared_discovery.prompts.query_generation import QUERY_GENERATION_PROMPT
 from mcpsquared_discovery.prompts.result_selection import RESULT_SELECTION_PROMPT
+from mcpsquared_discovery.core.logging import log_llm_call
+
+logger = logging.getLogger(__name__)
 
 
 def get_llm():
@@ -20,30 +24,50 @@ def get_llm():
     Initialize and return the LLM client.
 
     Returns:
-        Configured LangChain ChatOpenAI instance
+        Configured LangChain ChatLiteLLM instance
     """
-    return ChatOpenAI(
-        base_url="https://openrouter.ai/api/v1",
+    # Configure default headers for OpenRouter
+    default_headers = {
+        "HTTP-Referer": "https://mcpsquared-discovery.ai",
+        "X-Title": "MCP Squared Discovery Service"
+    }
+
+    # Log the call to be made
+    logger.debug("Making call to OpenRouter with model: %s", settings.LLM_MODEL)
+    logger.debug("OpenRouter API Key: %s", settings.OPENROUTER_API_KEY)
+    logger.debug("OpenRouter API Base: %s", settings.OPENROUTER_BASE_URL)
+
+    model_kwargs = {
+        "headers": default_headers,
+    }
+
+    return ChatLiteLLM(
+        model="openrouter/anthropic/claude-3.5-sonnet",
+        temperature=0.7,  # Add to settings if you want to make configurable
+        api_base=settings.OPENROUTER_BASE_URL,
         api_key=settings.OPENROUTER_API_KEY,
-        model=settings.LLM_MODEL,
+        model_kwargs=model_kwargs,
+        max_retries=2,
     )
 
 
-async def generate_search_queries(context: Dict) -> List[str]:
+async def generate_search_queries(prompt: str, context: Dict) -> List[str]:
     """
-    Generate search queries for MCP servers based on project context.
+    Generate search queries based on project context using LLM.
 
     Args:
-        context: Project context including prompt and files
+        prompt: User prompt
+        context: Project context dictionary
 
     Returns:
-        List of search queries
+        List of generated search queries
     """
+    logger.debug("Generating search queries from context")
     llm = get_llm()
 
     # Prepare context for the prompt
     prompt_context = {
-        "prompt": context["prompt"],
+        "prompt": prompt,
         "files": "\n\n".join(
             [f"File: {name}\n{content}" for name, content in context["files"].items()]
         ),
@@ -60,6 +84,13 @@ async def generate_search_queries(context: Dict) -> List[str]:
 
     # Parse the result into a list of queries
     queries = [q.strip() for q in result.split("\n") if q.strip()]
+    
+    log_llm_call(
+        logger,
+        f"Generate search queries for prompt: {prompt}",
+        f"Generated queries: {queries}\nRaw LLM response: {result}"
+    )
+    
     return queries
 
 
@@ -101,6 +132,12 @@ async def select_best_results(context: Dict, search_results: List[Dict]) -> List
     # Generate selection
     result = await chain.ainvoke(prompt_context)
 
+    log_llm_call(
+        logger,
+        "Select best results from search",
+        f"Raw LLM response: {result}"
+    )
+
     # Parse the result to get indices of selected servers
     selected_indices = []
     for line in result.split("\n"):
@@ -113,7 +150,9 @@ async def select_best_results(context: Dict, search_results: List[Dict]) -> List
                 continue
 
     # Return selected results
-    return [search_results[i] for i in selected_indices]
+    selected = [search_results[i] for i in selected_indices]
+    logger.debug(f"Selected {len(selected)} results from {len(search_results)} total results")
+    return selected
 
 
 async def generate_server_content(context: Dict, server: Dict) -> Dict:
@@ -148,6 +187,12 @@ async def generate_server_content(context: Dict, server: Dict) -> Dict:
 
     # Generate content
     result = await chain.ainvoke(prompt_context)
+
+    log_llm_call(
+        logger,
+        f"Generate content for server: {server.get('name', 'Unknown')}",
+        f"Raw LLM response: {result}"
+    )
 
     # Parse the result to extract different sections
     lines = result.split("\n")
@@ -185,6 +230,7 @@ async def generate_server_recommendations(
     Returns:
         List of MCPServer objects with recommendations
     """
+    logger.debug("Generating server recommendations")
     # Select best results
     best_results = await select_best_results(context, search_results)
 
@@ -217,4 +263,10 @@ async def generate_server_recommendations(
 
         recommendations.append(server)
 
+    log_llm_call(
+        logger,
+        "Generate final recommendations",
+        f"Generated {len(recommendations)} recommendations with details"
+    )
+    
     return recommendations

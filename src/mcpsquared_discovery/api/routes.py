@@ -25,6 +25,8 @@ router = APIRouter()
 @router.post("/discover", response_model=DiscoveryResponse)
 async def discover_mcp_servers(
     prompt: str = Form(...),
+    project_spec_mdc: Optional[str] = Form(None, alias="project_spec.mdc"),
+    package_json: Optional[str] = Form(None, alias="package.json"),
     files: Optional[List[UploadFile]] = File(None),
 ):
     """
@@ -32,21 +34,49 @@ async def discover_mcp_servers(
 
     Args:
         prompt: User prompt describing the project needs
-        files: Optional project files for context (specs, package configs, etc.)
+        project_spec_mdc: Optional project MDC specification
+        package_json: Optional package.json contents
+        files: Optional additional project files for context
 
     Returns:
         JSON response with recommended MCP servers
     """
     try:
-        # Analyze project files to understand context
-        project_context = await analyze_project_files(prompt, files)
+        # Create initial project context from form data
+        project_context = ProjectContext(
+            user_prompt=prompt,
+            project_mdc_file_contents=project_spec_mdc,
+            project_package_manager_contents=package_json,
+        )
+
+        # Analyze any additional project files to enhance context
+        if files:
+            project_context = await analyze_project_files(
+                prompt=prompt,
+                files=files,
+                existing_context=project_context
+            )
+
+        # Convert ProjectContext to dict for search
+        context_dict = {
+            "prompt": project_context.user_prompt,
+            "files": {},
+            "search_queries": [],
+        }
+        
+        if project_context.project_mdc_file_contents:
+            context_dict["files"]["project.mdc"] = project_context.project_mdc_file_contents
+        if project_context.project_package_manager_contents:
+            context_dict["files"]["package.json"] = project_context.project_package_manager_contents
+        if project_context.additional_files:
+            context_dict["files"].update(project_context.additional_files)
 
         # Search for relevant MCP servers
-        search_results = await search_mcp_servers(project_context)
+        search_results = await search_mcp_servers(context_dict)
 
         # Generate recommendations using LLM
         recommendations = await generate_server_recommendations(
-            project_context, search_results
+            context_dict, search_results
         )
 
         return DiscoveryResponse(mcp_servers=recommendations)
@@ -58,20 +88,32 @@ async def discover_mcp_servers(
 
 
 @router.post("/project-context")
-async def read_project_context(project_context: ProjectContext) -> Dict:
+async def read_project_context(
+    prompt: str = Form(...),
+    project_spec_mdc: Optional[str] = Form(None, alias="project_spec.mdc"),
+    package_json: Optional[str] = Form(None, alias="package.json"),
+) -> Dict:
     """
-    Process project context information.
+    Process project context information from form data.
 
     Args:
-        project_context: Project context information
+        prompt: The user's prompt
+        project_spec_mdc: Optional project MDC specification
+        package_json: Optional package.json contents
 
     Returns:
-        Confirmation message
+        Confirmation message with processed context
     """
+    project_context = ProjectContext(
+        user_prompt=prompt,
+        project_mdc_file_contents=project_spec_mdc,
+        project_package_manager_contents=package_json,
+    )
+    
     return {
         "status": "success",
         "message": "Received project context",
-        "prompt": project_context.user_prompt,
+        "data": project_context.model_dump(),
     }
 
 
@@ -79,6 +121,7 @@ async def read_project_context(project_context: ProjectContext) -> Dict:
 async def discover_mcp_servers_json(request: DiscoveryRequest):
     """
     Discover MCP servers based on project context provided as JSON.
+    This endpoint accepts JSON data instead of form data.
 
     Args:
         request: Discovery request with prompt and optional context
@@ -88,14 +131,14 @@ async def discover_mcp_servers_json(request: DiscoveryRequest):
     """
     try:
         # Extract project context
-        project_context = extract_project_context(request.prompt, request.context)
+        context_dict = extract_project_context(request.prompt, request.context)
 
         # Search for relevant MCP servers
-        search_results = await search_mcp_servers(project_context)
+        search_results = await search_mcp_servers(context_dict)
 
         # Generate recommendations using LLM
         recommendations = await generate_server_recommendations(
-            project_context, search_results
+            context_dict, search_results
         )
 
         return DiscoveryResponse(mcp_servers=recommendations)

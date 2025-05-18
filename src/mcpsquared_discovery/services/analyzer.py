@@ -64,36 +64,45 @@ def extract_project_context(
 
 
 async def analyze_project_files(
-    prompt: str, files: Optional[List[UploadFile]] = None
-) -> Dict:
+    prompt: str, 
+    files: Optional[List[UploadFile]] = None,
+    existing_context: Optional[ProjectContext] = None,
+) -> ProjectContext:
     """
     Analyze project files to understand context and generate search queries.
 
     Args:
         prompt: User prompt describing the project needs
         files: Optional project files for context
+        existing_context: Optional existing ProjectContext to enhance
 
     Returns:
-        Dictionary containing project context and search queries
+        ProjectContext object with analyzed information
     """
-    # Initialize context with prompt
-    context = {"prompt": prompt, "files": {}, "technologies": [], "search_queries": []}
+    # Start with existing context or create new one
+    if existing_context:
+        context = existing_context
+    else:
+        context = ProjectContext(
+            user_prompt=prompt,
+            project_mdc_file_contents=None,
+            project_package_manager_contents=None,
+            additional_files={}
+        )
 
     # Process files if provided
     if files:
         for file in files:
             file_content = await read_file_content(file)
-            context["files"][file.filename] = file_content
-
-            # Extract technologies from package files
-            if file.filename.endswith(
-                ("package.json", "pyproject.toml", "requirements.txt")
-            ):
-                # In a real implementation, we would parse these files to extract dependencies
-                pass
-
-    # Generate search queries using LLM
-    search_queries = await generate_search_queries(context)
-    context["search_queries"] = search_queries
+            
+            # Update appropriate fields based on file type
+            if file.filename.endswith(".mdc"):
+                context.project_mdc_file_contents = file_content
+            elif file.filename == "package.json":
+                context.project_package_manager_contents = file_content
+            else:
+                if not context.additional_files:
+                    context.additional_files = {}
+                context.additional_files[file.filename] = file_content
 
     return context

@@ -2,13 +2,16 @@
 Service for searching MCP servers from various sources.
 """
 
+import logging
 from typing import Dict, List
 
 import httpx
 
 from mcpsquared_discovery.core.config import settings
+from mcpsquared_discovery.core.logging import log_api_call
 from mcpsquared_discovery.services.content_retrieval import retrieve_content
 
+logger = logging.getLogger(__name__)
 
 async def search_smithery_api(query: str) -> List[Dict]:
     """
@@ -28,11 +31,21 @@ async def search_smithery_api(query: str) -> List[Dict]:
     params = {"q": query, "page": 1, "pageSize": 10}
 
     async with httpx.AsyncClient() as client:
+        logger.debug("Searching Smithery API with query: %s", query)
         response = await client.get(
             settings.SMITHERY_API_URL, headers=headers, params=params
         )
         response.raise_for_status()
-        return response.json().get("servers", [])
+        response_data = response.json()
+        
+        log_api_call(
+            logger,
+            "smithery_search",
+            {"query": query, "params": params},
+            {"status_code": response.status_code, "data": response_data}
+        )
+        
+        return response_data.get("servers", [])
 
 
 async def enrich_search_results(results: List[Dict]) -> List[Dict]:
