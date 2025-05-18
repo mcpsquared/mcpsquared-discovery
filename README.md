@@ -101,6 +101,88 @@ Using Docker Compose:
 docker-compose up
 ```
 
+## Docker Deployment
+
+### Local Build and Run
+
+Build the Docker image:
+```bash
+docker build -t mcpsquared-discovery .
+```
+
+Run with Doppler environment variables:
+```bash
+docker run --rm --env-file <(doppler secrets download --no-file --format docker) -p 8000:8000 -t mcpsquared-discovery
+```
+
+Run with local environment variables:
+```bash
+docker run -p 8000:8000 \
+  -e OPENROUTER_API_KEY=$OPENROUTER_API_KEY \
+  -e OPENROUTER_BASE_URL=$OPENROUTER_BASE_URL \
+  -e LLM_MODEL=$LLM_MODEL \
+  -e LANGCHAIN_API_KEY=$LANGCHAIN_API_KEY \
+  -e LANGCHAIN_ENDPOINT=$LANGCHAIN_ENDPOINT \
+  -e LANGCHAIN_PROJECT=$LANGCHAIN_PROJECT \
+  -e LANGCHAIN_TRACING_V2=$LANGCHAIN_TRACING_V2\
+  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
+  -e AWS_PROFILE=$AWS_PROFILE \
+  -e ANDISEARCH_API_KEY=$ANDISEARCH_API_KEY \
+  -e ENVIRONMENT=development \
+  -e CONTENT_RETRIEVAL_URL=$CONTENT_RETRIEVAL_URL \
+  -t mcpsquared-discovery
+```
+
+### Docker Hub Deployment
+
+Push to Docker Hub:
+```bash
+# Tag the image
+docker tag mcpsquared-discovery:latest jedwhite/mcpsquared-discovery:latest
+
+# Push to Docker Hub
+docker push jedwhite/mcpsquared-discovery:latest
+```
+
+### AWS ECR Deployment
+
+Push to Amazon ECR:
+```bash
+# Get ECR authentication token
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 033180851590.dkr.ecr.us-west-2.amazonaws.com
+
+# Tag the image for ECR
+docker tag mcpsquared-discovery:latest 033180851590.dkr.ecr.us-west-2.amazonaws.com/mcpsquared-discovery:latest
+
+# Push to ECR
+docker push 033180851590.dkr.ecr.us-west-2.amazonaws.com/mcpsquared-discovery:latest
+```
+
+### Development Tips
+
+For local testing, you may need to remove existing containers:
+```bash
+# Stop and remove existing containers
+docker ps -a | grep mcpsquared-discovery | awk '{print $1}' | xargs docker rm -f
+
+# Remove existing images
+docker images | grep mcpsquared-discovery | awk '{print $3}' | xargs docker rmi -f
+```
+
+Using Docker Compose for development:
+```bash
+# Start the service
+docker-compose up
+
+# Rebuild and start
+docker-compose up --build
+
+# Stop and remove containers
+docker-compose down
+```
+
 ## API Documentation
 
 Once the service is running, you can access the API documentation at:
