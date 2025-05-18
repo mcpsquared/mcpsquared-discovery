@@ -3,8 +3,9 @@ Pydantic models for request and response schemas.
 """
 
 from typing import Dict, List, Optional
+from urllib.parse import urlparse
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, AnyHttpUrl, field_validator
 
 
 class ProjectContext(BaseModel):
@@ -28,27 +29,55 @@ class Source(BaseModel):
     """Information about a source where an MCP server was found."""
 
     source_name: str = Field(..., description="Name of the directory source")
-    source_url: HttpUrl = Field(..., description="URL of the source page")
+    source_url: str = Field("", description="URL of the source page")
     source_title: str = Field(..., description="Title of the source page")
     source_description: str = Field(
         ..., description="Brief description from the source"
     )
+
+    @field_validator("source_url")
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        """Validate URL if present, allow empty string."""
+        if not v:
+            return ""
+        try:
+            result = urlparse(v)
+            if all([result.scheme, result.netloc]):
+                return v
+        except Exception:
+            pass
+        return ""
 
 
 class MCPServer(BaseModel):
     """Information about a recommended MCP server."""
 
     title: str = Field(..., description="Name of the MCP server")
-    github_url: Optional[HttpUrl] = Field(None, description="GitHub repository URL")
-    project_url: Optional[HttpUrl] = Field(None, description="Official project URL")
+    github_url: str = Field("", description="GitHub repository URL")
+    project_url: str = Field("", description="Official project URL")
     sources: List[Source] = Field(
-        ..., description="Sources where this server was found"
+        default_factory=list, description="Sources where this server was found"
     )
     cli_command: str = Field(
         ..., description="Command to install or configure the server"
     )
     description: str = Field(..., description="Brief description of the server")
     content: str = Field(..., description="Detailed markdown content about the server")
+
+    @field_validator("github_url", "project_url")
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        """Validate URL if present, allow empty string."""
+        if not v:
+            return ""
+        try:
+            result = urlparse(v)
+            if all([result.scheme, result.netloc]):
+                return v
+        except Exception:
+            pass
+        return ""
 
 
 class DiscoveryResponse(BaseModel):

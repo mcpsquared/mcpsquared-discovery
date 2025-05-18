@@ -4,6 +4,8 @@ Service for LLM interactions using LangChain.
 
 import logging
 from typing import Dict, List
+from pathlib import Path
+import json
 
 from langchain_community.chat_models import ChatLiteLLM
 from langchain.prompts import ChatPromptTemplate
@@ -17,6 +19,17 @@ from mcpsquared_discovery.prompts.result_selection import RESULT_SELECTION_PROMP
 from mcpsquared_discovery.core.logging import log_llm_call
 
 logger = logging.getLogger(__name__)
+
+def load_mcp_resources() -> str:
+    """
+    Load MCP resources markdown file.
+
+    Returns:
+        Content of the MCP resources markdown file
+    """
+    resources_path = Path(__file__).parent.parent / "data" / "mcp_resources.md"
+    with open(resources_path) as f:
+        return f.read()
 
 
 def get_llm():
@@ -65,12 +78,17 @@ async def generate_search_queries(prompt: str, context: Dict) -> List[str]:
     logger.debug("Generating search queries from context")
     llm = get_llm()
 
+    # Add MCP resources to context if not already present
+    if "mcp_resources" not in context:
+        context["mcp_resources"] = load_mcp_resources()
+
     # Prepare context for the prompt
     prompt_context = {
         "prompt": prompt,
         "files": "\n\n".join(
             [f"File: {name}\n{content}" for name, content in context["files"].items()]
         ),
+        "mcp_resources": context["mcp_resources"]
     }
 
     # Create prompt
@@ -96,16 +114,35 @@ async def generate_search_queries(prompt: str, context: Dict) -> List[str]:
 
 async def select_best_results(context: Dict, search_results: List[Dict]) -> List[Dict]:
     """
-    Select the best MCP servers from search results using LLM.
+    Select the best MCP servers from search results and MCP resources using LLM.
 
     Args:
         context: Project context
-        search_results: List of search results
+        search_results: List of search results (may be empty)
 
     Returns:
-        Filtered list of the best matching servers
+        List of recommended servers, including suggestions from MCP resources
     """
     llm = get_llm()
+
+    # Always load MCP resources
+    context["mcp_resources"] = load_mcp_resources()
+
+    # Prepare search results section
+    search_results_text = ""
+    if search_results:
+        search_results_text = "# Direct Matches\n" + "\n\n".join(
+            [
+                f"Result {i+1}:\nTitle: {result.get('title', 'Unknown')}\n"
+                f"Description: {result.get('description', 'No description')}\n"
+                f"CLI Command: {result.get('cli_command', 'Not specified')}\n"
+                f"GitHub URL: {result.get('github_url', 'Not specified')}\n"
+                f"Content: {result.get('content', '')[:1000]}..."
+                for i, result in enumerate(search_results)
+            ]
+        )
+    else:
+        search_results_text = "# No Direct Matches Found\nPlease suggest relevant servers from the MCP Resources."
 
     # Prepare context for the prompt
     prompt_context = {
@@ -113,14 +150,8 @@ async def select_best_results(context: Dict, search_results: List[Dict]) -> List
         "files": "\n\n".join(
             [f"File: {name}\n{content}" for name, content in context["files"].items()]
         ),
-        "search_results": "\n\n".join(
-            [
-                f"Result {i+1}:\nTitle: {result.get('name', 'Unknown')}\n"
-                f"Description: {result.get('description', 'No description')}\n"
-                f"Content: {result.get('full_content', '')[:1000]}..."
-                for i, result in enumerate(search_results)
-            ]
-        ),
+        "mcp_resources": context["mcp_resources"],
+        "search_results": search_results_text,
     }
 
     # Create prompt
@@ -138,20 +169,48 @@ async def select_best_results(context: Dict, search_results: List[Dict]) -> List
         f"Raw LLM response: {result}"
     )
 
-    # Parse the result to get indices of selected servers
-    selected_indices = []
-    for line in result.split("\n"):
-        if line.strip().startswith("Result"):
-            try:
-                index = int(line.split("Result")[1].split(":")[0].strip()) - 1
-                if 0 <= index < len(search_results):
-                    selected_indices.append(index)
-            except (ValueError, IndexError):
+    try:
+        # Parse JSON response
+        selected_servers = json.loads(result)
+        
+        # Validate and normalize server objects
+        selected = []
+        for server in selected_servers:
+            if not isinstance(server, dict) or "title" not in server:
                 continue
+                
+            # Ensure all required fields are present with defaults
+            normalized_server = {
+                "title": server.get("title", "Unknown"),
+                "description": server.get("description", "No description available"),
+                "github_url": server.get("github_url", ""),
+                "project_url": server.get("project_url", ""),
+                "sources": [],  # Can be populated if needed
+                "cli_command": server.get("cli_command", "# Visit https://mcpindex.net for installation instructions"),
+                "content": server.get("content", "Please check the MCP documentation for more details.")
+            }
+            selected.append(normalized_server)
+            
+    except (json.JSONDecodeError, AttributeError) as e:
+        logger.error(f"Failed to parse LLM response as JSON: {e}")
+        logger.debug(f"Raw response: {result}")
+        selected = []
 
-    # Return selected results
-    selected = [search_results[i] for i in selected_indices]
-    logger.debug(f"Selected {len(selected)} results from {len(search_results)} total results")
+    # If no valid results, provide a default suggestion
+    if not selected:
+        default_server = {
+            "title": "MCP Server Recommendation",
+            "description": "Based on your requirements, please visit the MCP Index for available servers.",
+            "github_url": "https://github.com/modelcontextprotocol/servers",
+            "project_url": "https://mcpindex.net",
+            "sources": [],
+            "cli_command": "# Visit https://mcpindex.net to find the right MCP server for your needs",
+            "content": "The Model Context Protocol (MCP) offers various servers that might meet your needs. "
+                      "Please visit https://mcpindex.net to explore available servers and find detailed installation instructions."
+        }
+        selected.append(default_server)
+
+    logger.debug(f"Selected {len(selected)} recommendations")
     return selected
 
 
@@ -168,15 +227,20 @@ async def generate_server_content(context: Dict, server: Dict) -> Dict:
     """
     llm = get_llm()
 
+    # Add MCP resources to context if not already present
+    if "mcp_resources" not in context:
+        context["mcp_resources"] = load_mcp_resources()
+
     # Prepare context for the prompt
     prompt_context = {
         "prompt": context["prompt"],
         "files": "\n\n".join(
             [f"File: {name}\n{content}" for name, content in context["files"].items()]
         ),
-        "server_name": server.get("name", "Unknown"),
+        "mcp_resources": context["mcp_resources"],
+        "server_name": server.get("title", "Unknown"),
         "server_description": server.get("description", "No description"),
-        "server_content": server.get("full_content", ""),
+        "server_content": server.get("content", ""),
     }
 
     # Create prompt
@@ -190,7 +254,7 @@ async def generate_server_content(context: Dict, server: Dict) -> Dict:
 
     log_llm_call(
         logger,
-        f"Generate content for server: {server.get('name', 'Unknown')}",
+        f"Generate content for server: {server.get('title', 'Unknown')}",
         f"Raw LLM response: {result}"
     )
 
@@ -231,34 +295,45 @@ async def generate_server_recommendations(
         List of MCPServer objects with recommendations
     """
     logger.debug("Generating server recommendations")
+    
+    # Add MCP resources to context
+    context["mcp_resources"] = load_mcp_resources()
+    
     # Select best results
     best_results = await select_best_results(context, search_results)
 
     recommendations = []
 
     for result in best_results:
-        # Generate detailed content
-        content = await generate_server_content(context, result)
+        # Create source objects from the sources list
+        sources = []
+        for source_data in result.get("sources", []):
+            source = Source(
+                source_name=source_data.get("source_name", "unknown"),
+                source_url=source_data.get("source_url", ""),
+                source_title=source_data.get("source_title", ""),
+                source_description=source_data.get("source_description", "")
+            )
+            sources.append(source)
 
-        # Create source object
-        source = Source(
-            source_name=result.get("source", "smithery.ai"),
-            source_url=result.get("url", "https://smithery.ai"),
-            source_title=result.get("name", "Unknown"),
-            source_description=result.get("description", "No description"),
-        )
+        # If no sources provided, create a default one
+        if not sources:
+            sources = [Source(
+                source_name="github.com",
+                source_url=result.get("github_url", ""),
+                source_title=result.get("title", "Unknown"),
+                source_description=result.get("description", "")
+            )]
 
-        # Create server object
+        # Create server object using the JSON structure directly
         server = MCPServer(
-            title=content.get("title", result.get("name", "Unknown")),
-            github_url=content.get("github_url"),
-            project_url=content.get("project_url"),
-            sources=[source],
-            cli_command=content.get("cli_command", "npm install -g unknown-mcp-server"),
-            description=content.get(
-                "description", result.get("description", "No description")
-            ),
-            content=content.get("content", "No detailed information available."),
+            title=result.get("title", "Unknown"),
+            github_url=result.get("github_url"),
+            project_url=result.get("project_url"),
+            sources=sources,
+            cli_command=result.get("cli_command", "npm install -g unknown-mcp-server"),
+            description=result.get("description", "No description"),
+            content=result.get("content", "No detailed information available.")
         )
 
         recommendations.append(server)

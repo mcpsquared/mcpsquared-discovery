@@ -1,0 +1,356 @@
+{
+    "mcp_servers": [
+        {
+            "title": "AWS KB Retrieval",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/aws-kb-retrieval-server",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/aws-kb-retrieval-server",
+                    "source_title": "AWS KB Retrieval - Model Context Protocol",
+                    "source_description": "Retrieval from AWS Knowledge Base using Bedrock Agent Runtime"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-aws-kb-retrieval",
+            "description": "Retrieval from AWS Knowledge Base using Bedrock Agent Runtime",
+            "content": "# AWS KB Retrieval MCP Server\n\nThe AWS KB Retrieval MCP Server provides a bridge between AI assistants and AWS Knowledge Base using Bedrock Agent Runtime. This server enables retrieval-augmented generation (RAG) capabilities by accessing information stored in AWS Knowledge Bases.\n\n## Key Features\n\n- **Knowledge Base Querying**: Search and retrieve information from AWS Knowledge Bases\n- **Bedrock Integration**: Leverages AWS Bedrock Agent Runtime for efficient retrieval\n- **Contextual Responses**: Returns relevant information based on natural language queries\n- **Secure Access**: Manages AWS authentication and access controls\n\n## Configuration\n\nTo use this server, you'll need to configure your AWS credentials:\n\n```json\n{\n  \"mcpServers\": {\n    \"aws-kb-retrieval\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-aws-kb-retrieval\"],\n      \"env\": {\n        \"AWS_ACCESS_KEY_ID\": \"your-access-key\",\n        \"AWS_SECRET_ACCESS_KEY\": \"your-secret-key\",\n        \"AWS_REGION\": \"your-region\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly useful for projects that need to access specialized knowledge stored in AWS Knowledge Bases, providing AI assistants with accurate and up-to-date information from your organization's knowledge repositories."
+        },
+        {
+            "title": "Brave Search",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search",
+            "project_url": "https://search.brave.com/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search",
+                    "source_title": "Brave Search - Model Context Protocol",
+                    "source_description": "Web and local search using Brave's Search API"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-brave-search",
+            "description": "Web and local search using Brave's Search API",
+            "content": "# Brave Search MCP Server\n\nThe Brave Search MCP Server provides AI assistants with powerful web and local search capabilities through Brave's Search API. This server enables AI models to retrieve up-to-date information from the internet and local sources.\n\n## Key Features\n\n- **Web Search**: Perform comprehensive web searches with high-quality results\n- **Local Search**: Find location-based information and services\n- **Privacy-Focused**: Leverages Brave's privacy-respecting search technology\n- **Customizable Queries**: Supports advanced search parameters and filters\n\n## Configuration\n\nTo use this server, you'll need to configure it with your Brave Search API key:\n\n```json\n{\n  \"mcpServers\": {\n    \"brave-search\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-brave-search\"],\n      \"env\": {\n        \"BRAVE_API_KEY\": \"your-brave-api-key\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly valuable for projects that require current information from the web, allowing AI assistants to provide up-to-date answers and research capabilities without requiring constant model retraining."
+        },
+        {
+            "title": "EverArt",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/everart",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/everart",
+                    "source_title": "EverArt - Model Context Protocol",
+                    "source_description": "AI image generation using various models"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-everart",
+            "description": "AI image generation using various models",
+            "content": "# EverArt MCP Server\n\nThe EverArt MCP Server provides AI image generation capabilities through various models, allowing AI assistants to create visual content on demand. This server bridges the gap between text-based AI and visual content creation.\n\n## Key Features\n\n- **Multi-Model Support**: Access to various AI image generation models\n- **Customizable Generation**: Control image style, content, and parameters\n- **High-Quality Output**: Generate professional-looking images from text descriptions\n- **Format Options**: Support for different image formats and resolutions\n\n## Configuration\n\nTo use this server, configure it in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"everart\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-everart\"],\n      \"env\": {\n        \"API_KEY\": \"your-api-key-if-needed\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly useful for projects that require visual content generation, such as creating illustrations, design mockups, or visual aids based on text descriptions. It enables AI assistants to enhance their responses with relevant visual elements."
+        },
+        {
+            "title": "Everything",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+                    "source_title": "Everything - Model Context Protocol",
+                    "source_description": "Reference / test server with prompts, resources, and tools"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-everything",
+            "description": "Reference / test server with prompts, resources, and tools",
+            "content": "# Everything MCP Server\n\nThe Everything MCP Server is a comprehensive reference and test server that showcases the full range of MCP capabilities. It includes a variety of prompts, resources, and tools, making it an excellent starting point for understanding and testing MCP functionality.\n\n## Key Features\n\n- **Demonstration Tools**: A collection of example tools showing different MCP capabilities\n- **Sample Resources**: Various resource types demonstrating resource handling\n- **Test Prompts**: Pre-configured prompts for testing and learning\n- **Reference Implementation**: Serves as a model for building your own MCP servers\n\n## Configuration\n\nTo use this server for testing or learning purposes:\n\n```json\n{\n  \"mcpServers\": {\n    \"everything\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-everything\"]\n    }\n  }\n}\n```\n\nThis server is particularly valuable for developers who are new to MCP and want to explore its capabilities, or for testing MCP client implementations. It provides a comprehensive set of examples that demonstrate the protocol's features and functionality."
+        },
+        {
+            "title": "Fetch",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+                    "source_title": "Fetch - Model Context Protocol",
+                    "source_description": "Web content fetching and conversion for efficient LLM usage"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-fetch",
+            "description": "Web content fetching and conversion for efficient LLM usage",
+            "content": "# Fetch MCP Server\n\nThe Fetch MCP Server provides web content fetching and conversion capabilities, optimizing web content for efficient use by Large Language Models (LLMs). This server enables AI assistants to access and process information from the web in a format that's ideal for analysis and context.\n\n## Key Features\n\n- **Web Content Retrieval**: Fetch content from any URL on the internet\n- **Format Conversion**: Transform HTML and other formats into clean, LLM-friendly text\n- **Content Optimization**: Remove unnecessary elements and format content for efficient processing\n- **Error Handling**: Robust handling of connection issues and invalid URLs\n\n## Configuration\n\nTo use this server in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"fetch\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-fetch\"]\n    }\n  }\n}\n```\n\nThis server is particularly useful for projects that require access to web content, such as research assistants, content summarizers, or any application that needs to incorporate external information. It allows AI assistants to retrieve and process web content efficiently, providing valuable context for generating accurate and informed responses."
+        },
+        {
+            "title": "Filesystem",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+                    "source_title": "Filesystem - Model Context Protocol",
+                    "source_description": "Secure file operations with configurable access controls"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-filesystem /path/to/allowed/files",
+            "description": "Secure file operations with configurable access controls",
+            "content": "# Filesystem MCP Server\n\nThe Filesystem MCP Server provides secure file operations with configurable access controls, allowing AI assistants to interact with the local filesystem in a controlled manner. This server enables reading, writing, and managing files and directories while maintaining security boundaries.\n\n## Key Features\n\n- **Secure Access**: Configurable permissions and access controls for filesystem operations\n- **File Operations**: Read, write, create, and delete files within allowed directories\n- **Directory Management**: List, create, and navigate directory structures\n- **Path Validation**: Ensures operations remain within authorized boundaries\n\n## Configuration\n\nTo use this server with specific directory access:\n\n```json\n{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/path/to/allowed/files\"]\n    }\n  }\n}\n```\n\nThis server is particularly useful for projects that require file management capabilities, such as document processing, code generation, or data analysis. It allows AI assistants to work with files in a secure and controlled manner, providing access to local resources while maintaining appropriate security boundaries."
+        },
+        {
+            "title": "Git",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+                    "source_title": "Git - Model Context Protocol",
+                    "source_description": "Tools to read, search, and manipulate Git repositories"
+                }
+            ],
+            "cli_command": "uvx mcp-server-git --repository path/to/git/repo",
+            "description": "Tools to read, search, and manipulate Git repositories",
+            "content": "# Git MCP Server\n\nThe Git MCP Server provides tools to read, search, and manipulate Git repositories, enabling AI assistants to interact with version-controlled codebases. This server allows for comprehensive Git operations directly through AI interfaces.\n\n## Key Features\n\n- **Repository Exploration**: Browse files, commits, and branches within Git repositories\n- **Code Search**: Find specific code patterns or functionality across the repository\n- **Commit History**: View and analyze commit logs and changes over time\n- **Branch Management**: Create, switch, and manage Git branches\n\n## Configuration\n\nTo use this server with a specific Git repository:\n\n```json\n{\n  \"mcpServers\": {\n    \"git\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-server-git\", \"--repository\", \"path/to/git/repo\"]\n    }\n  }\n}\n```\n\nAlternatively, using pip:\n\n```json\n{\n  \"mcpServers\": {\n    \"git\": {\n      \"command\": \"python\",\n      \"args\": [\"-m\", \"mcp_server_git\", \"--repository\", \"path/to/git/repo\"]\n    }\n  }\n}\n```\n\nThis server is particularly valuable for software development projects, allowing AI assistants to help with code navigation, understanding repository history, and performing Git operations. It enables more effective collaboration between AI and developers in version-controlled environments."
+        },
+        {
+            "title": "GitHub",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/github",
+            "project_url": "https://github.com",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/github",
+                    "source_title": "GitHub - Model Context Protocol",
+                    "source_description": "Repository management, file operations, and GitHub API integration"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-github",
+            "description": "Repository management, file operations, and GitHub API integration",
+            "content": "# GitHub MCP Server\n\nThe GitHub MCP Server provides comprehensive GitHub integration, enabling repository management, file operations, and access to the full GitHub API. This server allows AI assistants to interact with GitHub repositories and perform a wide range of GitHub-related tasks.\n\n## Key Features\n\n- **Repository Management**: Create, clone, and manage GitHub repositories\n- **File Operations**: Browse, edit, and commit files within repositories\n- **Issue Tracking**: Create, update, and comment on GitHub issues\n- **Pull Requests**: Manage pull requests and code reviews\n- **GitHub API Access**: Comprehensive access to GitHub's API functionality\n\n## Configuration\n\nTo use this server with your GitHub account:\n\n```json\n{\n  \"mcpServers\": {\n    \"github\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-github\"],\n      \"env\": {\n        \"GITHUB_PERSONAL_ACCESS_TOKEN\": \"your-github-token\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly useful for software development workflows, enabling AI assistants to help with code management, issue tracking, and other GitHub-related tasks. It provides a seamless integration between AI capabilities and GitHub's collaborative development platform, enhancing productivity for developers and teams."
+        },
+        {
+            "title": "GitLab",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/gitlab",
+            "project_url": "https://gitlab.com",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/gitlab",
+                    "source_title": "GitLab - Model Context Protocol",
+                    "source_description": "GitLab API, enabling project management"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-gitlab",
+            "description": "GitLab API, enabling project management",
+            "content": "# GitLab MCP Server\n\nThe GitLab MCP Server provides integration with the GitLab API, enabling comprehensive project management capabilities. This server allows AI assistants to interact with GitLab repositories, issues, merge requests, and other GitLab features.\n\n## Key Features\n\n- **Repository Access**: Browse, search, and manage GitLab repositories\n- **Issue Management**: Create, update, and track GitLab issues\n- **Merge Requests**: Manage merge requests and code reviews\n- **Project Administration**: Access to project settings and configurations\n- **CI/CD Pipeline Integration**: Monitor and manage GitLab CI/CD pipelines\n\n## Configuration\n\nTo use this server with your GitLab account:\n\n```json\n{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-gitlab\"],\n      \"env\": {\n        \"GITLAB_TOKEN\": \"your-gitlab-token\",\n        \"GITLAB_URL\": \"https://gitlab.com\" // Or your self-hosted GitLab URL\n      }\n    }\n  }\n}\n```\n\nThis server is particularly valuable for development teams using GitLab for their source code management and CI/CD needs. It enables AI assistants to help with code management, issue tracking, and other GitLab-related tasks, enhancing productivity and collaboration within GitLab-based workflows."
+        },
+        {
+            "title": "Google Drive",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/gdrive",
+            "project_url": "https://drive.google.com",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/gdrive",
+                    "source_title": "Google Drive - Model Context Protocol",
+                    "source_description": "File access and search capabilities for Google Drive"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-gdrive",
+            "description": "File access and search capabilities for Google Drive",
+            "content": "# Google Drive MCP Server\n\nThe Google Drive MCP Server provides file access and search capabilities for Google Drive, enabling AI assistants to interact with documents, spreadsheets, presentations, and other files stored in Google Drive. This server allows for comprehensive Google Drive operations directly through AI interfaces.\n\n## Key Features\n\n- **File Access**: Read, create, update, and delete files in Google Drive\n- **Search Capabilities**: Find files by name, content, or metadata\n- **Folder Management**: Create, navigate, and organize folders\n- **File Sharing**: Manage sharing settings and permissions\n- **Google Workspace Integration**: Work with Google Docs, Sheets, and Slides\n\n## Configuration\n\nTo use this server with your Google Drive account:\n\n```json\n{\n  \"mcpServers\": {\n    \"gdrive\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-gdrive\"],\n      \"env\": {\n        \"GOOGLE_CLIENT_ID\": \"your-client-id\",\n        \"GOOGLE_CLIENT_SECRET\": \"your-client-secret\",\n        \"GOOGLE_REFRESH_TOKEN\": \"your-refresh-token\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly useful for productivity and collaboration workflows, allowing AI assistants to help with document management, file organization, and content creation in Google Drive. It enables seamless integration between AI capabilities and Google's cloud-based file storage and collaboration platform."
+        },
+        {
+            "title": "Google Maps",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/google-maps",
+            "project_url": "https://maps.google.com",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/google-maps",
+                    "source_title": "Google Maps - Model Context Protocol",
+                    "source_description": "Location services, directions, and place details"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-google-maps",
+            "description": "Location services, directions, and place details",
+            "content": "# Google Maps MCP Server\n\nThe Google Maps MCP Server provides location services, directions, and place details through the Google Maps API. This server enables AI assistants to access geographic information, routing, and points of interest data.\n\n## Key Features\n\n- **Geocoding**: Convert addresses to geographic coordinates and vice versa\n- **Place Search**: Find businesses, landmarks, and other points of interest\n- **Directions**: Get detailed travel directions between locations\n- **Distance Calculation**: Determine distances and travel times\n- **Place Details**: Access comprehensive information about specific locations\n\n## Configuration\n\nTo use this server with your Google Maps API key:\n\n```json\n{\n  \"mcpServers\": {\n    \"google-maps\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-google-maps\"],\n      \"env\": {\n        \"GOOGLE_MAPS_API_KEY\": \"your-google-maps-api-key\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly valuable for applications that require location-based information, such as travel planning, local business recommendations, or geographic analysis. It allows AI assistants to incorporate spatial context and location-based data into their responses, enhancing their ability to provide relevant and practical information."
+        },
+        {
+            "title": "Memory",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+                    "source_title": "Memory - Model Context Protocol",
+                    "source_description": "Knowledge graph-based persistent memory system"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-memory",
+            "description": "Knowledge graph-based persistent memory system",
+            "content": "# Memory MCP Server\n\nThe Memory MCP Server provides a knowledge graph-based persistent memory system for AI assistants. This server enables the storage, retrieval, and management of information across conversations, allowing for long-term memory and context awareness.\n\n## Key Features\n\n- **Knowledge Graph Storage**: Organize information in a structured, interconnected format\n- **Persistent Memory**: Maintain information across multiple sessions\n- **Semantic Search**: Find relevant information based on meaning, not just keywords\n- **Context Management**: Store and retrieve contextual information for more coherent interactions\n- **Memory Operations**: Add, update, delete, and query stored information\n\n## Configuration\n\nTo use this server in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"memory\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-memory\"]\n    }\n  }\n}\n```\n\nThis server is particularly valuable for applications that require continuity and context awareness across multiple interactions. It enables AI assistants to remember previous conversations, user preferences, and important information, creating a more personalized and coherent user experience over time."
+        },
+        {
+            "title": "PostgreSQL",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/postgres",
+            "project_url": "https://www.postgresql.org/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/postgres",
+                    "source_title": "PostgreSQL - Model Context Protocol",
+                    "source_description": "Read-only database access with schema inspection"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-postgres postgresql://localhost/mydb",
+            "description": "Read-only database access with schema inspection",
+            "content": "# PostgreSQL MCP Server\n\nThe PostgreSQL MCP Server provides read-only access to PostgreSQL databases with comprehensive schema inspection capabilities. This server enables AI assistants to query database structures and data while maintaining security through controlled access.\n\n## Key Features\n\n- **Schema Inspection**: Explore database tables, columns, relationships, and constraints\n- **SQL Queries**: Execute read-only SQL queries against PostgreSQL databases\n- **Data Analysis**: Retrieve and analyze data from database tables\n- **Secure Access**: Read-only operations with configurable access controls\n- **Connection Management**: Efficient handling of database connections\n\n## Configuration\n\nTo use this server with your PostgreSQL database:\n\n```json\n{\n  \"mcpServers\": {\n    \"postgres\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-postgres\", \"postgresql://username:password@hostname:port/database\"]\n    }\n  }\n}\n```\n\nThis server is particularly useful for data analysis, database exploration, and applications that require access to structured data in PostgreSQL databases. It allows AI assistants to understand database schemas and query data effectively, providing valuable insights and information from your database systems."
+        },
+        {
+            "title": "Puppeteer",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/puppeteer",
+            "project_url": "https://pptr.dev/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/puppeteer",
+                    "source_title": "Puppeteer - Model Context Protocol",
+                    "source_description": "Browser automation and web scraping"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-puppeteer",
+            "description": "Browser automation and web scraping",
+            "content": "# Puppeteer MCP Server\n\nThe Puppeteer MCP Server provides browser automation and web scraping capabilities through Google's Puppeteer library. This server enables AI assistants to interact with web pages, extract information, and automate browser-based tasks.\n\n## Key Features\n\n- **Web Scraping**: Extract structured data from websites\n- **Browser Automation**: Programmatically control a headless Chrome browser\n- **Page Interaction**: Click buttons, fill forms, and navigate web pages\n- **Screenshot Capture**: Take screenshots of web pages or elements\n- **PDF Generation**: Convert web pages to PDF format\n\n## Configuration\n\nTo use this server in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"puppeteer\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-puppeteer\"]\n    }\n  }\n}\n```\n\nThis server is particularly valuable for web data collection, automated testing, and tasks that require interaction with web interfaces. It allows AI assistants to access and process information from websites that may not provide APIs, enabling more comprehensive web-based capabilities."
+        },
+        {
+            "title": "Redis",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/redis",
+            "project_url": "https://redis.io/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/redis",
+                    "source_title": "Redis - Model Context Protocol",
+                    "source_description": "Interact with Redis key-value stores"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-redis",
+            "description": "Interact with Redis key-value stores",
+            "content": "# Redis MCP Server\n\nThe Redis MCP Server provides integration with Redis key-value stores, enabling AI assistants to interact with Redis databases for fast and efficient data operations. This server allows for comprehensive Redis operations directly through AI interfaces.\n\n## Key Features\n\n- **Key-Value Operations**: Set, get, update, and delete Redis keys and values\n- **Data Structures**: Work with Redis strings, lists, sets, hashes, and sorted sets\n- **Expiration Management**: Set and manage time-to-live for Redis keys\n- **Pub/Sub Messaging**: Interact with Redis publish/subscribe channels\n- **Transaction Support**: Execute multiple commands atomically\n\n## Configuration\n\nTo use this server with your Redis instance:\n\n```json\n{\n  \"mcpServers\": {\n    \"redis\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-redis\"],\n      \"env\": {\n        \"REDIS_URL\": \"redis://username:password@hostname:port\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly useful for applications that require fast data storage and retrieval, caching, real-time messaging, or session management. It enables AI assistants to leverage Redis's speed and versatility for efficient data operations, enhancing performance in data-intensive scenarios."
+        },
+        {
+            "title": "Sentry",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sentry",
+            "project_url": "https://sentry.io/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sentry",
+                    "source_title": "Sentry - Model Context Protocol",
+                    "source_description": "Retrieving and analyzing issues from Sentry.io"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-sentry",
+            "description": "Retrieving and analyzing issues from Sentry.io",
+            "content": "# Sentry MCP Server\n\nThe Sentry MCP Server provides integration with Sentry.io for retrieving and analyzing application issues and errors. This server enables AI assistants to access error tracking data, helping with debugging and application monitoring.\n\n## Key Features\n\n- **Issue Retrieval**: Access and browse issues reported in Sentry\n- **Error Analysis**: Get detailed information about application errors\n- **Event Tracking**: View event data associated with issues\n- **Project Management**: Access Sentry projects and their configurations\n- **Issue Statistics**: Retrieve metrics and trends for application issues\n\n## Configuration\n\nTo use this server with your Sentry account:\n\n```json\n{\n  \"mcpServers\": {\n    \"sentry\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-sentry\"],\n      \"env\": {\n        \"SENTRY_AUTH_TOKEN\": \"your-sentry-auth-token\",\n        \"SENTRY_ORGANIZATION\": \"your-organization-slug\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly valuable for development teams using Sentry for error tracking and monitoring. It allows AI assistants to help with issue investigation, error analysis, and monitoring application health, providing valuable insights into application performance and reliability."
+        },
+        {
+            "title": "Sequential Thinking",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+                    "source_title": "Sequential Thinking - Model Context Protocol",
+                    "source_description": "Dynamic and reflective problem-solving through thought sequences"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-sequentialthinking",
+            "description": "Dynamic and reflective problem-solving through thought sequences",
+            "content": "# Sequential Thinking MCP Server\n\nThe Sequential Thinking MCP Server enables dynamic and reflective problem-solving through structured thought sequences. This server helps AI assistants break down complex problems into manageable steps, think through solutions methodically, and refine their reasoning process.\n\n## Key Features\n\n- **Structured Thinking**: Break down problems into sequential steps\n- **Reflective Analysis**: Review and refine reasoning processes\n- **Dynamic Problem-Solving**: Adapt thinking strategies based on intermediate results\n- **Thought Visualization**: Represent thinking processes in a structured format\n- **Reasoning Enhancement**: Improve the quality and reliability of AI reasoning\n\n## Configuration\n\nTo use this server in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"sequentialthinking\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-sequentialthinking\"]\n    }\n  }\n}\n```\n\nThis server is particularly valuable for complex problem-solving tasks, logical reasoning, and situations requiring careful analysis. It enhances the AI's ability to tackle difficult problems by providing a framework for methodical thinking and self-reflection, leading to more reliable and well-reasoned solutions."
+        },
+        {
+            "title": "Slack",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/slack",
+            "project_url": "https://slack.com/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/slack",
+                    "source_title": "Slack - Model Context Protocol",
+                    "source_description": "Channel management and messaging capabilities"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-slack",
+            "description": "Channel management and messaging capabilities",
+            "content": "# Slack MCP Server\n\nThe Slack MCP Server provides comprehensive integration with Slack, enabling channel management and messaging capabilities. This server allows AI assistants to interact with Slack workspaces, channels, and users.\n\n## Key Features\n\n- **Channel Management**: Create, join, and manage Slack channels\n- **Messaging**: Send, read, and reply to messages in channels and direct messages\n- **User Interaction**: Mention users, manage user groups, and handle user information\n- **File Sharing**: Upload and share files in Slack channels\n- **Workspace Information**: Access workspace details and configurations\n\n## Configuration\n\nTo use this server with your Slack workspace:\n\n```json\n{\n  \"mcpServers\": {\n    \"slack\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-slack\"],\n      \"env\": {\n        \"SLACK_BOT_TOKEN\": \"xoxb-your-bot-token\",\n        \"SLACK_USER_TOKEN\": \"xoxp-your-user-token\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly useful for team collaboration, communication automation, and integrating AI capabilities into Slack-based workflows. It enables AI assistants to participate in team discussions, provide information, and help manage communication within Slack workspaces."
+        },
+        {
+            "title": "Sqlite",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite",
+            "project_url": "https://www.sqlite.org/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite",
+                    "source_title": "Sqlite - Model Context Protocol",
+                    "source_description": "Database interaction and business intelligence capabilities"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-sqlite",
+            "description": "Database interaction and business intelligence capabilities",
+            "content": "# SQLite MCP Server\n\nThe SQLite MCP Server provides database interaction and business intelligence capabilities for SQLite databases. This server enables AI assistants to query, analyze, and manage data stored in SQLite database files.\n\n## Key Features\n\n- **Database Operations**: Create, read, update, and delete data in SQLite databases\n- **Schema Management**: Create and modify database tables and structures\n- **SQL Queries**: Execute SQL queries for data retrieval and manipulation\n- **Data Analysis**: Perform analytical queries and generate insights\n- **Business Intelligence**: Extract meaningful information from database data\n\n## Configuration\n\nTo use this server with your SQLite database:\n\n```json\n{\n  \"mcpServers\": {\n    \"sqlite\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-sqlite\", \"path/to/your/database.db\"]\n    }\n  }\n}\n```\n\nThis server is particularly valuable for applications that use SQLite for data storage, such as local applications, prototypes, or small to medium-sized projects. It allows AI assistants to interact with SQLite databases, providing data management and analysis capabilities without requiring a full database server setup."
+        },
+        {
+            "title": "Time",
+            "github_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+            "project_url": null,
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+                    "source_title": "Time - Model Context Protocol",
+                    "source_description": "Time and timezone conversion capabilities"
+                }
+            ],
+            "cli_command": "npx -y @modelcontextprotocol/server-time",
+            "description": "Time and timezone conversion capabilities",
+            "content": "# Time MCP Server\n\nThe Time MCP Server provides time and timezone conversion capabilities, enabling AI assistants to work with accurate time information across different regions. This server helps with time-related calculations, formatting, and conversions.\n\n## Key Features\n\n- **Current Time**: Get accurate current time in any timezone\n- **Timezone Conversion**: Convert times between different timezones\n- **Date Calculations**: Perform operations like adding days or finding time differences\n- **Time Formatting**: Format time and date information in various styles\n- **Calendar Operations**: Work with calendar information like days of week, holidays, etc.\n\n## Configuration\n\nTo use this server in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"time\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-time\"]\n    }\n  }\n}\n```\n\nThis server is particularly useful for applications that deal with scheduling, international coordination, or any scenario where accurate time information is important. It ensures that AI assistants can provide reliable time-related information and calculations, regardless of the user's or the system's local timezone."
+        },
+        {
+            "title": "21st.dev Magic",
+            "github_url": "https://github.com/21st-dev/magic-mcp",
+            "project_url": "https://www.21st.dev",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/21st-dev/magic-mcp",
+                    "source_title": "21st.dev Magic - Model Context Protocol",
+                    "source_description": "Create crafted UI components inspired by the best 21st.dev design engineers"
+                }
+            ],
+            "cli_command": "npx -y magic-mcp",
+            "description": "Create crafted UI components inspired by the best 21st.dev design engineers",
+            "content": "# 21st.dev Magic MCP Server\n\nThe 21st.dev Magic MCP Server enables AI assistants to create crafted UI components inspired by the best 21st.dev design engineers. This server bridges the gap between AI and professional UI design, allowing for the generation of high-quality interface components.\n\n## Key Features\n\n- **UI Component Generation**: Create professional-grade UI components based on descriptions\n- **Design System Integration**: Components follow 21st.dev design principles and standards\n- **Customization Options**: Adjust styles, behaviors, and properties of generated components\n- **Code Output**: Generate ready-to-use code for UI components\n- **Design Inspiration**: Access design patterns from experienced 21st.dev engineers\n\n## Configuration\n\nTo use this server in your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"21st-magic\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"magic-mcp\"],\n      \"env\": {\n        \"API_KEY\": \"your-api-key-if-required\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly valuable for frontend development projects, allowing AI assistants to help create professional UI components that follow best practices and design standards. It enables developers to quickly generate high-quality interface elements based on natural language descriptions, accelerating the UI development process."
+        },
+        {
+            "title": "Adfin",
+            "github_url": "https://github.com/Adfin-Engineering/mcp-server-adfin",
+            "project_url": "https://www.adfin.com/",
+            "sources": [
+                {
+                    "source_name": "github.com",
+                    "source_url": "https://github.com/Adfin-Engineering/mcp-server-adfin",
+                    "source_title": "Adfin - Model Context Protocol",
+                    "source_description": "The only platform you need to get paid - all payments in one place, invoicing and accounting reconciliations with Adfin"
+                }
+            ],
+            "cli_command": "npx -y mcp-server-adfin",
+            "description": "The only platform you need to get paid - all payments in one place, invoicing and accounting reconciliations with Adfin",
+            "content": "# Adfin MCP Server\n\nThe Adfin MCP Server provides integration with Adfin's payment platform, offering a comprehensive solution for handling payments, invoicing, and accounting reconciliations. This server enables AI assistants to interact with Adfin's services, helping users manage their financial operations efficiently.\n\n## Key Features\n\n- **Payment Processing**: Manage all payment methods in one unified platform\n- **Invoicing**: Create, send, and track invoices automatically\n- **Accounting Integration**: Seamless reconciliation with accounting systems\n- **Financial Reporting**: Generate insights and reports on payment activities\n- **Customer Management**: Track customer information and payment histories\n\n## Configuration\n\nTo use this server with your Adfin account:\n\n```json\n{\n  \"mcpServers\": {\n    \"adfin\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-server-adfin\"],\n      \"env\": {\n        \"ADFIN_API_KEY\": \"your-adfin-api-key\",\n        \"ADFIN_ACCOUNT_ID\": \"your-account-id\"\n      }\n    }\n  }\n}\n```\n\nThis server is particularly valuable for businesses and freelancers who need to manage payments, invoicing, and financial reconciliations. It allows AI assistants to help with financial operations, providing a streamlined approach to payment processing and financial management through Adfin's platform."
+        }
+    ]
+}

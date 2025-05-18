@@ -6,10 +6,29 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # OpenRouter Settings
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - SMITHERY_API_KEY=${SMITHERY_API_KEY}
+      - OPENROUTER_BASE_URL=${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      - LLM_MODEL=${LLM_MODEL:-anthropic/claude-3.5-sonnet}
+      
+      # Langsmith Settings
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+      - LANGCHAIN_ENDPOINT=${LANGCHAIN_ENDPOINT:-https://api.smith.langchain.com}
+      - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-mcp-squared-discovery}
+      - LANGCHAIN_TRACING_V2=true
+      
+      # AWS Settings
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-west-2}
+      - AWS_PROFILE=${AWS_PROFILE:-andi-ai}
+      
+      # API Settings
       - ANDISEARCH_API_KEY=${ANDISEARCH_API_KEY}
       - ENVIRONMENT=development
+      
+      # Content Retrieval Settings
+      - CONTENT_RETRIEVAL_URL=${CONTENT_RETRIEVAL_URL:-https://api.andisearch.com/parser/parser}
     volumes:
       - ./src:/app/src
     command: uvicorn mcpsquared_discovery.main:app --host 0.0.0.0 --port 8000 --reload

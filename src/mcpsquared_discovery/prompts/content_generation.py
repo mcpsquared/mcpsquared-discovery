@@ -11,6 +11,9 @@ User Prompt: {prompt}
 # Project Files
 {files}
 
+# MCP Resources
+{mcp_resources}
+
 # Server Information
 Name: {server_name}
 Description: {server_description}
@@ -29,6 +32,7 @@ Include:
    - Key features and capabilities
    - How it would be useful for this specific project
    - Basic configuration and usage instructions
+   - Any relevant information from the MCP resources
 
 Format your response exactly as follows:
 TITLE: [server title]

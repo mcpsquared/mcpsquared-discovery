@@ -3,7 +3,8 @@ FROM python:3.12.7-slim as base
 # Set environment variables
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    ENVIRONMENT=production
 
 WORKDIR /app
 
@@ -21,6 +22,11 @@ RUN poetry install --no-dev --no-interaction --no-ansi
 
 # Copy application code
 COPY src /app/src
+
+# Create data directory and copy JSON data
+RUN mkdir -p /app/src/mcpsquared_discovery/data
+COPY src/mcpsquared_discovery/data/mcp_servers.json /app/src/mcpsquared_discovery/data/
+COPY src/mcpsquared_discovery/data/mcp_resources.md /app/src/mcpsquared_discovery/data/
 
 # Run the application
 CMD ["uvicorn", "mcpsquared_discovery.main:app", "--host", "0.0.0.0", "--port", "8000"]
