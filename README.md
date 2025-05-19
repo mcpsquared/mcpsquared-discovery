@@ -16,6 +16,10 @@ The MCP Squared Discovery Service accepts a prompt and file attachments, then re
 - Score-based ranking system for search results
 - Case-insensitive search across multiple fields
 - Duplicate removal based on title
+- Support for both form-data and JSON request formats
+- Project context analysis for better recommendations
+- Content retrieval from URLs for enhanced server information
+- Comprehensive error handling and logging
 
 ## Getting Started
 
@@ -49,15 +53,11 @@ poetry config virtualenvs.in-project true
 # Create new virtualenv with project Python version
 poetry env use python
 
-# Activate virtualenv
-poetry env activate - not working currently
-
 # Install dependencies
 poetry install
 ```
 
 Increment version:
-
 ```bash
 poetry version patch
 ```
@@ -87,6 +87,10 @@ ENVIRONMENT=development
 
 # Content Retrieval Settings
 CONTENT_RETRIEVAL_URL=https://api.andisearch.com/parser/parser
+
+# Smithery Settings
+SMITHERY_API_KEY=your_smithery_api_key
+SMITHERY_API_URL=https://api.smithery.dev/v1/servers
 ```
 
 ### Running the Service
@@ -99,6 +103,96 @@ poetry run uvicorn mcpsquared_discovery.main:app --reload
 Using Docker Compose:
 ```bash
 docker-compose up
+```
+
+## API Documentation
+
+Once the service is running, you can access the API documentation at:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+### Endpoints
+
+#### POST /discover
+Discover MCP servers based on project context using form data.
+
+**Request:**
+- `prompt` (form field, required): User prompt describing the project needs
+- `project_spec_mdc` (form field, optional): Project MDC specification
+- `package_json` (form field, optional): Package.json contents
+- `files` (form files, optional): Additional project files for context
+
+**Response:**
+```json
+{
+  "mcp_servers": [
+    {
+      "title": "Server Name",
+      "github_url": "https://github.com/repo",
+      "project_url": "https://project-site.com",
+      "sources": [
+        {
+          "source_name": "directory-name",
+          "source_url": "https://source-url.com",
+          "source_title": "Page Title",
+          "source_description": "Brief description"
+        }
+      ],
+      "cli_command": "npm install package",
+      "description": "Short description",
+      "content": "Detailed markdown content"
+    }
+  ]
+}
+```
+
+#### POST /discover-json
+Discover MCP servers based on project context using JSON data.
+
+**Request Body:**
+```json
+{
+  "prompt": "User prompt describing needs",
+  "context": {
+    "files": {
+      "project_spec.mdc": "MDC file contents",
+      "package.json": "Package.json contents"
+    }
+  }
+}
+```
+
+**Response:** Same as /discover endpoint
+
+#### POST /project-context
+Process and validate project context information.
+
+**Request:**
+- `prompt` (form field, required): User prompt
+- `project_spec_mdc` (form field, optional): Project MDC specification
+- `package_json` (form field, optional): Package.json contents
+
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Received project context",
+  "data": {
+    "user_prompt": "string",
+    "project_mdc_file_contents": "string",
+    "project_package_manager_contents": "string"
+  }
+}
+```
+
+#### GET /health
+Health check endpoint.
+
+**Response:**
+```json
+{
+  "status": "healthy"
+}
 ```
 
 ## Docker Deployment
@@ -124,7 +218,7 @@ docker run -p 8000:8000 \
   -e LANGCHAIN_API_KEY=$LANGCHAIN_API_KEY \
   -e LANGCHAIN_ENDPOINT=$LANGCHAIN_ENDPOINT \
   -e LANGCHAIN_PROJECT=$LANGCHAIN_PROJECT \
-  -e LANGCHAIN_TRACING_V2=$LANGCHAIN_TRACING_V2\
+  -e LANGCHAIN_TRACING_V2=$LANGCHAIN_TRACING_V2 \
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
   -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
@@ -132,6 +226,8 @@ docker run -p 8000:8000 \
   -e ANDISEARCH_API_KEY=$ANDISEARCH_API_KEY \
   -e ENVIRONMENT=development \
   -e CONTENT_RETRIEVAL_URL=$CONTENT_RETRIEVAL_URL \
+  -e SMITHERY_API_KEY=$SMITHERY_API_KEY \
+  -e SMITHERY_API_URL=$SMITHERY_API_URL \
   -t mcpsquared-discovery
 ```
 
@@ -183,50 +279,6 @@ docker-compose up --build
 docker-compose down
 ```
 
-## API Documentation
-
-Once the service is running, you can access the API documentation at:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
-
-### Endpoints
-
-#### POST /discover
-
-Discover MCP servers based on project context.
-
-**Request:**
-- `prompt` (form field): User prompt describing the project needs
-- `files` (form files): Optional project files for context (specs, package configs, etc.)
-
-**Response:**
-```json
-{
-  "mcp_servers": [
-    {
-      "title": "Server Name",
-      "github_url": "https://github.com/repo",
-      "project_url": "https://project-site.com",
-      "sources": [
-        {
-          "source_name": "directory-name",
-          "source_url": "https://source-url.com",
-          "source_title": "Page Title",
-          "source_description": "Brief description"
-        }
-      ],
-      "cli_command": "npm install package",
-      "description": "Short description",
-      "content": "Detailed markdown content"
-    }
-  ]
-}
-```
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Implementation Details
 
 The service follows a modular architecture with separate components for:
@@ -235,12 +287,19 @@ The service follows a modular architecture with separate components for:
 - Local JSON-based MCP server search with scoring system
 - Content retrieval and enrichment
 - LLM interaction using LangChain
+- Comprehensive logging and error handling
 
 Key features of the implementation:
 1. Local JSON database for fast and reliable server lookup
 2. Scoring system for ranking search results based on multiple fields
 3. LangChain with Claude 3.5 Sonnet for intelligent result selection
-4. Comprehensive error handling and validation
-5. Docker and Docker Compose configuration for easy deployment
-6. Poetry for dependency management
-```
+4. Support for both form-data and JSON request formats
+5. Project context analysis for better recommendations
+6. Content retrieval from URLs for enhanced server information
+7. Comprehensive error handling and logging
+8. Docker and Docker Compose configuration for easy deployment
+9. Poetry for dependency management
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
