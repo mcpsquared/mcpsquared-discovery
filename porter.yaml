@@ -1,0 +1,18 @@
+version: v2
+name: mcpsquared-discovery
+services:
+- name: mcpsquared-discovery-service
+  run: ""
+  type: web
+  instances: 1
+  cpuCores: 0.2
+  ramMegabytes: 192
+  terminationGracePeriodSeconds: 30
+  port: 8000
+  sleep: true
+  serviceMeshEnabled: false
+build:
+  context: ./
+  method: docker
+  dockerfile: ./Dockerfile
+deploymentStrategy: {}
